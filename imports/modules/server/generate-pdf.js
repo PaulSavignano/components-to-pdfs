@@ -4,6 +4,32 @@ import fs from 'fs'
 
 let module
 
+const generatePDF = (html, fileName) => {
+  try {
+    pdf.create(html, {
+      format: 'letter',
+      border: { top: '0.6in', right: '0.6in', bottom: '0.6in', left: '0.6in' },
+    }).toFile(`./tmp/${fileName}`, (error, response) => {
+      if (error) {
+        module.recject(error)
+      } else {
+        module.resolve({ fileName, base64: getBase64String(response.filename) })
+        fs.unlink(response.filename)
+      }
+    })
+  } catch (exception) {
+    module.reject(exception)
+  }
+}
+
+const getComponentAsHTML = (component, props) => {
+  try {
+    return ReactDOMServer.renderToStaticMarkup(component(props))
+  } catch (exception) {
+    module.reject(exception)
+  }
+}
+
 const handler = ({ component, props, fileName }, promise) => {
   module = promise
   const html = getComponentAsHTML(component, props)
