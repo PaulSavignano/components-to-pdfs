@@ -4,6 +4,7 @@ import { Button, ListGroupItem } from 'react-bootstrap'
 import { Meteor } from 'meteor/meteor'
 import { Bert } from 'meteor/themeteorchef:bert'
 import fileSaver from 'file-saver'
+import { removeDocument } from '../../api/documents/methods'
 import { base64ToBlob } from '../../modules/base64-to-blob'
 
 const handleDownloadPDF = (event) => {
@@ -18,6 +19,20 @@ const handleDownloadPDF = (event) => {
       const blob = base64ToBlob(response.base64)
       fileSaver.saveAs(blob, response.fileName)
       target.innerHTML = 'Download'
+    }
+  })
+}
+
+const handleRemoveDocument = (event) => {
+  event.preventDefault()
+  const documentId = event.target.getAttribute('data-id')
+  removeDocument.call({
+    _id: documentId,
+  }, (error) => {
+    if (error) {
+      Bert.alert(error.reason, 'danger')
+    } else {
+      Bert.alert('Document removed.', 'success')
     }
   })
 }
