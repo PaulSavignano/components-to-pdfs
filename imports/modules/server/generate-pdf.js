@@ -4,6 +4,14 @@ import fs from 'fs'
 
 let module
 
+const getComponentAsHTML = (component, props) => {
+  try {
+    return ReactDOMServer.renderToStaticMarkup(component(props))
+  } catch (exception) {
+    module.reject(exception)
+  }
+}
+
 const handler = ({ component, props, fileName }, promise) => {
   module = promise
   const html = getComponentAsHTML(component, props)
