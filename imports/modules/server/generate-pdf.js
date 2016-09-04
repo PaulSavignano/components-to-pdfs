@@ -4,6 +4,15 @@ import fs from 'fs'
 
 let module
 
+const getBase64String = (path) => {
+  try {
+    const file = fs.readFileSync(path)
+    return new Buffer(file).toString('base64')
+  } catch (exception) {
+    module.reject(exception)
+  }
+}
+
 const generatePDF = (html, fileName) => {
   try {
     pdf.create(html, {
