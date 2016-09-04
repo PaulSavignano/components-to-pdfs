@@ -11,7 +11,6 @@ const users = [{
   roles: ['admin'],
 }]
 
-
 users.forEach(({ email, password, profile, roles }) => {
   const userExists = Meteor.users.findOne({ 'emails.address': email })
 
