@@ -1,6 +1,21 @@
 import React from 'react'
 import InlineCss from 'react-inline-css'
 import { Button, ListGroupItem } from 'react-bootstrap'
+import { removeDocument } from '../../api/documents/methods'
+
+const handleRemoveDocument = (event) => {
+  event.preventDefault()
+  const documentId = event.target.getAttribute('data-id')
+  removeDocument.call({
+    _id: documentId,
+  }, (error) => {
+    if (error) {
+      Bert.alert(error.reason, 'danger')
+    } else {
+      Bert.alert('Document removed.', 'success')
+    }
+  })
+}
 
 export const Document = ({ document }) => (
   <InlineCss stylesheet={`
