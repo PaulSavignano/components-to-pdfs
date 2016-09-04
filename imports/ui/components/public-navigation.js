@@ -18,5 +18,4 @@ export const PublicNavigation = () => (
       </LinkContainer>
     </Nav>
   </div>
-  
 )
