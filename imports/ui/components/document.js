@@ -2,6 +2,26 @@ import React from 'react'
 import InlineCss from 'react-inline-css'
 import { Button, ListGroupItem } from 'react-bootstrap'
 import { removeDocument } from '../../api/documents/methods'
+import { Meteor } from 'meteor/meteor'
+import { Bert } from 'meteor/themeteorchef:bert'
+import fileSaver from 'file-saver'
+import { base64ToBlob } from '../../modules/base64-to-blob'
+
+const handleDownloadPDF = (event) => {
+  event.preventDefault()
+  const { target } = event
+  const documentId = target.getAttribute('data-id')
+  target.innerHTML = '<em>Downloading...</em>'
+  Meteor.call('documents.download', { documentId }, (error, response) => {
+    if (error) {
+      Bert.alert(error.reason, 'danger')
+    } else {
+      const blob = base64ToBlob(response.base64)
+      fileSaver.saveAs(blob, response.fileName)
+      target.innerHTML = 'Download'
+    }
+  })
+}
 
 const handleRemoveDocument = (event) => {
   event.preventDefault()
