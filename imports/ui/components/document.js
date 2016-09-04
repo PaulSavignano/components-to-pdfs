@@ -23,6 +23,8 @@ const handleDownloadPDF = (event) => {
   })
 }
 
+
+
 const handleRemoveDocument = (event) => {
   event.preventDefault()
   const documentId = event.target.getAttribute('data-id')
