@@ -7,6 +7,7 @@ let module
 const getBase64String = (path) => {
   try {
     const file = fs.readFileSync(path)
+    console.log(typeof(file))
     return new Buffer(file).toString('base64')
   } catch (exception) {
     module.reject(exception)
@@ -17,7 +18,7 @@ const generatePDF = (html, fileName) => {
   try {
     pdf.create(html, {
       format: 'letter',
-      border: { top: '0.6in', right: '0.6in', bottom: '0.6in', left: '0.6in' },
+      border: { top: '0.1in', right: '0.1in', bottom: '0.1in', left: '0.1in' },
     }).toFile(`./tmp/${fileName}`, (error, response) => {
       if (error) {
         module.recject(error)
