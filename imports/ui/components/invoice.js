@@ -1,18 +1,19 @@
 import React from 'react'
+import { Link } from 'react-router'
 import InlineCss from 'react-inline-css'
 import { PageHeader, Button, ListGroupItem } from 'react-bootstrap'
 import { Meteor } from 'meteor/meteor'
 import { Bert } from 'meteor/themeteorchef:bert'
 import fileSaver from 'file-saver'
-import { removeDocument } from '../../api/documents/methods'
+import { removeInvoice } from '../../api/invoices/methods'
 import { base64ToBlob } from '../../modules/base64-to-blob'
 
 const handleDownloadPDF = (event) => {
   event.preventDefault()
   const { target } = event
-  const documentId = target.getAttribute('data-id')
+  const invoiceId = target.getAttribute('data-id')
   target.innerHTML = '<em>Downloading...</em>'
-  Meteor.call('documents.download', { documentId }, (error, response) => {
+  Meteor.call('invoices.download', { invoiceId }, (error, response) => {
     if (error) {
       Bert.alert(error.reason, 'danger')
     } else {
@@ -23,21 +24,23 @@ const handleDownloadPDF = (event) => {
   })
 }
 
-const handleRemoveDocument = (event) => {
+const handleRemoveInvoice = (event) => {
   event.preventDefault()
-  const documentId = event.target.getAttribute('data-id')
-  removeDocument.call({
-    _id: documentId,
+  const invoiceId = event.target.getAttribute('data-id')
+  removeInvoice.call({
+    _id: invoiceId,
   }, (error) => {
     if (error) {
       Bert.alert(error.reason, 'danger')
     } else {
-      Bert.alert('Document removed.', 'success')
+      Bert.alert('Invoice removed.', 'success')
     }
   })
 }
 
-export const Document = ({ document }) => (
+export const Invoice = ({ invoice }) => {
+const url = `/invoices/${invoice._id}`
+return (
   <InlineCss stylesheet={`
     input {
     -webkit-appearance: none; box-shadow: none !important;
@@ -280,9 +283,10 @@ export const Document = ({ document }) => (
 
     }
   `}>
-    <ListGroupItem className="Document">
-      <Button onClick={ handleDownloadPDF } data-id={ document._id } bsStyle="success">Download</Button>
-      <Button onClick={ handleRemoveDocument } data-id={ document._id } bsStyle="danger" className="pull-right">Remove</Button>
+    <ListGroupItem>
+      <Link to={url}>Invoice: {invoice._id}</Link>
+      <Button onClick={ handleDownloadPDF } data-id={ invoice._id } bsStyle="success">Download</Button>
+      <Button onClick={ handleRemoveInvoice } data-id={ invoice._id } bsStyle="danger" className="pull-right">Remove</Button>
       <hr/>
       <div className="flex-container">
         <div className="flex-cell logo">
@@ -403,13 +407,14 @@ export const Document = ({ document }) => (
           </p>
         </div>
       </div>
-      <h3>{ document.title }</h3>
-      <p>{ document.body }</p>
+      <h3>{ invoice.title }</h3>
+      <p>{ invoice.body }</p>
 
     </ListGroupItem>
   </InlineCss>
 )
+}
 
-Document.propTypes = {
-  document: React.PropTypes.object.isRequired,
+Invoice.propTypes = {
+  invoice: React.PropTypes.object.isRequired,
 }

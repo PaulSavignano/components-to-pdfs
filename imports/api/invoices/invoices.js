@@ -1,9 +1,9 @@
 import { Mongo } from 'meteor/mongo'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema'
 
-export const Documents = new Mongo.Collection('Documents')
+export const Invoices = new Mongo.Collection('Invoices')
 
-Documents.schema = new SimpleSchema({
+Invoices.schema = new SimpleSchema({
   title: {
     type: String,
     label: 'The title of the document.',
@@ -14,4 +14,4 @@ Documents.schema = new SimpleSchema({
   },
 })
 
-Documents.attachSchema(Documents.schema)
+Invoices.attachSchema(Invoices.schema)
