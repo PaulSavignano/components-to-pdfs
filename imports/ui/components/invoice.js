@@ -6,6 +6,7 @@ import { Meteor } from 'meteor/meteor'
 import { Bert } from 'meteor/themeteorchef:bert'
 import fileSaver from 'file-saver'
 import { removeInvoice } from '../../api/invoices/methods'
+import { updateInvoice } from '../../api/invoices/methods'
 import { base64ToBlob } from '../../modules/base64-to-blob'
 
 const handleDownloadPDF = (event) => {
@@ -22,6 +23,11 @@ const handleDownloadPDF = (event) => {
       target.innerHTML = 'Download'
     }
   })
+}
+
+const handleUpdateInvoice = (event) => {
+  event.preventDefault()
+  console.log(event.target)
 }
 
 const handleRemoveInvoice = (event) => {
@@ -284,134 +290,139 @@ return (
     }
   `}>
     <ListGroupItem>
-      <Link to={url}>Invoice: {invoice._id}</Link>
-      <Button onClick={ handleDownloadPDF } data-id={ invoice._id } bsStyle="success">Download</Button>
-      <Button onClick={ handleRemoveInvoice } data-id={ invoice._id } bsStyle="danger" className="pull-right">Remove</Button>
-      <hr/>
-      <div className="flex-container">
-        <div className="flex-cell logo">
-          <div><img src="http://placehold.it/90x90"/></div>
-          <p>
-            Paul Savignano<br/>
-            1234 Carlsbad Ct<br/>
-            Carlsbad, CA 92011
-          </p>
-          <p>
-            Phone: (760) 123-1234<br/>
-            Paul.Savignano@gmail.com
-          </p>
-        </div>
+      <form onSubmit={ handleUpdateInvoice }>
+        <Button onClick={ handleDownloadPDF } data-id={ invoice._id } bsStyle="success">Download</Button>
+        <Button type="submit" data-id={ invoice._id } bsStyle="success">Update</Button>
+        <Button onClick={ handleRemoveInvoice } data-id={ invoice._id } bsStyle="danger" className="pull-right">Remove</Button>
+        <hr/>
 
-        <div className="flex-cell logo">
-          <h2>Invoice</h2>
-          <table>
-            <tbody>
-              <tr>
-                <td>Invoice #:</td>
-                <td><input defaultValue="1001001"/></td>
-              </tr>
-              <tr>
-                <td>Invoice date:</td>
-                <td contentEditable="true">10/14/2016</td>
-              </tr>
-              <tr>
-                <td>Terms:</td>
-                <td contentEditable="true">Due on receipt</td>
-              </tr>
-              <tr>
-                <td>Due date:</td>
-                <td contentEditable="true">10/14/2016</td>
-              </tr>
-            </tbody>
-          </table>
-          <div className="amount-due-summary">
-            <div>Amount Due:</div>
-            <div><strong>$1050.00</strong></div>
+        <div className="flex-container">
+          <div className="flex-cell logo">
+            <div><img src="http://placehold.it/90x90"/></div>
+            <p>
+              Paul Savignano<br/>
+              1234 Carlsbad Ct<br/>
+              Carlsbad, CA 92011
+            </p>
+            <p>
+              Phone: (760) 123-1234<br/>
+              Paul.Savignano@gmail.com
+            </p>
+          </div>
+
+          <div className="flex-cell logo">
+            <h2>Invoice</h2>
+            <table>
+              <tbody>
+                <tr>
+                  <td>Invoice #:</td>
+                  <td contentEditable="true" suppressContentEditableWarning={true} id="number">
+                    { invoice.number }
+                  </td>
+                </tr>
+                <tr>
+                  <td>Invoice date:</td>
+                  <td contentEditable="true" suppressContentEditableWarning={true}>10/14/2016</td>
+                </tr>
+                <tr>
+                  <td>Terms:</td>
+                  <td contentEditable="true" suppressContentEditableWarning={true}>Due on receipt</td>
+                </tr>
+                <tr>
+                  <td>Due date:</td>
+                  <td contentEditable="true" suppressContentEditableWarning={true}>10/14/2016</td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="amount-due-summary">
+              <div>Amount Due:</div>
+              <div><strong>$1050.00</strong></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <hr/>
+        <hr/>
 
-      <div className="flex-container">
-        <div className="flex-cell">
-          <h3>Bill To:</h3>
-          <div contentEditable="true">Elliot Alderson</div>
-          <div contentEditable="true">1234 Robot Ln</div>
-          <div contentEditable="true">Robotsville, CA 92123</div>
-          <br/>
-          <div contentEditable="true">elliot.alderson@robot.com</div>
-          <div contentEditable="true">(760) 123-4567</div>
-        </div>
-      </div>
-      <br/><br/>
-
-      <div className="flex-container invoice-details">
-        <div className="flex-cell description">
-          <div><strong>Description</strong></div>
-          <div contentEditable="true">
-            Updated delivery date on Cart page and saved the date as a Cart attribute. Displayed date in order confirmation email.
+        <div className="flex-container">
+          <div className="flex-cell">
+            <h3>Bill To:</h3>
+            <div contentEditable="true" suppressContentEditableWarning={true}>Elliot Alderson</div>
+            <div contentEditable="true" suppressContentEditableWarning={true}>1234 Robot Ln</div>
+            <div contentEditable="true" suppressContentEditableWarning={true}>Robotsville, CA 92123</div>
+            <br/>
+            <div contentEditable="true" suppressContentEditableWarning={true}>elliot.alderson@robot.com</div>
+            <div contentEditable="true" suppressContentEditableWarning={true}>(760) 123-4567</div>
           </div>
         </div>
-        <div className="flex-cell hours">
-          <div><strong>Hours</strong></div>
-          <div contentEditable="true">15</div>
+        <br/><br/>
+
+        <div className="flex-container invoice-details">
+          <div className="flex-cell description">
+            <div><strong>Description</strong></div>
+            <div contentEditable="true" suppressContentEditableWarning={true}>
+              Updated delivery date on Cart page and saved the date as a Cart attribute. Displayed date in order confirmation email.
+            </div>
+          </div>
+          <div className="flex-cell hours">
+            <div><strong>Hours</strong></div>
+            <div contentEditable="true" suppressContentEditableWarning={true}>15</div>
+          </div>
+          <div className="flex-cell">
+            <div><strong>Rate</strong></div>
+            <div contentEditable="true" suppressContentEditableWarning={true}>$70.00</div>
+          </div>
+          <div className="flex-cell">
+            <div><strong>Amount</strong></div>
+            <div>$1050.00</div>
+          </div>
         </div>
-        <div className="flex-cell">
-          <div><strong>Rate</strong></div>
-          <div contentEditable="true">$70.00</div>
-        </div>
-        <div className="flex-cell">
-          <div><strong>Amount</strong></div>
-          <div>$1050.00</div>
-        </div>
-      </div>
 
 
-      <div className="flex-container invoice-totals">
-        <div className="flex-cell invoice-total">
-          <table>
-            <tbody>
-              <tr>
-                <td>Subtotal:</td>
-                <td>$1050.00</td>
-              </tr>
-              <tr>
-                <td>Total:</td>
-                <td>$1050.00</td>
-              </tr>
-              <tr>
-                <td>Amount paid:</td>
-                <td>$1050.00</td>
-              </tr>
-              <tr>
-                <td>Amount due:</td>
-                <td>$0.00</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="flex-container invoice-totals">
+          <div className="flex-cell invoice-total">
+            <table>
+              <tbody>
+                <tr>
+                  <td>Subtotal:</td>
+                  <td>$1050.00</td>
+                </tr>
+                <tr>
+                  <td>Total:</td>
+                  <td>$1050.00</td>
+                </tr>
+                <tr>
+                  <td>Amount paid:</td>
+                  <td>$1050.00</td>
+                </tr>
+                <tr>
+                  <td>Amount due:</td>
+                  <td>$0.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      <hr/>
+        <hr/>
 
-      <div className="flex-container">
-        <div className="flex-cell">
-          <h3>Notes:</h3>
-          <p>
-            Thank you for your business!<br/>
-          </p>
-          <p>
-            elliot.alderson@robot.com<br/>
-            (760) 123-4567
-          </p>
+        <div className="flex-container">
+          <div className="flex-cell">
+            <h3>Notes:</h3>
+            <p>
+              Thank you for your business!<br/>
+            </p>
+            <p>
+              elliot.alderson@robot.com<br/>
+              (760) 123-4567
+            </p>
+          </div>
         </div>
-      </div>
-      <h3>{ invoice.title }</h3>
-      <p>{ invoice.body }</p>
+        <h3>{ invoice.title }</h3>
+        <p>{ invoice.body }</p>
+      </form>
+      </ListGroupItem>
 
-    </ListGroupItem>
-  </InlineCss>
+    </InlineCss>
 )
 }
 
