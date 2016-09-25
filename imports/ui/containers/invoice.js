@@ -1,17 +1,13 @@
-import { composeWithTracker } from 'react-komposer'
+import { createContainer } from 'meteor/react-meteor-data'
 import { Invoices } from '../../api/invoices/invoices'
 import { Invoice } from '../components/invoice'
-import { Loading } from '../components/loading'
 import { Meteor } from 'meteor/meteor'
 
-const composer = (props, onData) => {
-  const { invoiceId } = props.params
-  console.log(invoiceId)
+export default createContainer(({ params }) => {
+  console.log(params)
+  const { invoiceId } = params
   const subscription = Meteor.subscribe('invoices')
-  if (subscription) {
-    const invoice = Invoices.findOne(invoiceId)
-    onData(null, { invoice })
-  }
-}
-
-export default composeWithTracker(composer, Loading)(Invoice)
+  const loading = !subscription.ready()
+  const invoice = Invoices.findOne(invoiceId)
+  return { loading, invoice }
+}, Invoice)

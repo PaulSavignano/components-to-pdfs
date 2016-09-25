@@ -27,21 +27,18 @@ export const updateInvoice = new ValidatedMethod({
   name: 'invoices.update',
   validate: new SimpleSchema({
     _id: { type: String },
-    'update.number': { type: String, optional: true },
-    'udpate.date': { type: String, optional: true },
-    'update.due_date': { type: String, optional: true },
-    'update.bill_to': { type: String, optional: true },
-    'update.bill_to_cc': { type: String, optional: true },
-    'update.description': { type: String, optional: true },
-    'update.hours': { type: String, optional: true },
-    'update.rate': { type: String, optional: true },
-    'update.amount': { type: Number, optional: true },
-    'update.amount_paid': { type: Number, optional: true },
-    'update.amount_due': { type: Number, optional: true },
-    'update.notes': { type: String, optional: true },
+    number: { type: String, optional: true },
+    date: { type: String, optional: true },
+    due_date: { type: String, optional: true },
+    bill_to: { type: String, optional: true },
+    bill_to_cc: { type: String, optional: true },
+    description: { type: String, optional: true },
+    hours: { type: String, optional: true },
+    rate: { type: String, optional: true },
+    notes: { type: String, optional: true },
   }).validator(),
-  run({ _id, update }) {
-    Invoices.update(_id, { $set: update })
+  run({ _id, number, date, due_date, bill_to, bill_to_cc, description, hours, rate, notes }) {
+    Invoices.update(_id, { $set: { number, date, due_date, bill_to, bill_to_cc, description, hours, rate, notes } })
   },
 })
 

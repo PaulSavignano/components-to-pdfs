@@ -1,12 +1,12 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
+import { PageHeader, Row, Col } from 'react-bootstrap'
 import { AddInvoice } from '../components/add-invoice'
 import InvoicesList from '../containers/invoices-list'
 
-export const Invoices = () => (
+export const InvoicesPage = () => (
   <Row>
     <Col xs={ 12 }>
-      <h4 className="page-header">Invoices</h4>
+      <PageHeader>Invoices</PageHeader>
       <AddInvoice />
       <InvoicesList />
     </Col>
