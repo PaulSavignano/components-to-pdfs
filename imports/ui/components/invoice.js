@@ -110,9 +110,13 @@ const renderInvoice = (invoice) => (
     margin-right: 5px;
     }
 
-    .invoice-header > .flex-item {
-    flex-basis: 200px;
-    flex-grow: 0;
+    .business-item, .invoice-summary-item {
+    flex: 1 1 200px;
+    min-width: 200px;
+    }
+
+    .invoice-header > .flex-item:nth-child(2) {
+    flex: 3 3 30%;
     }
 
     .header > .flex-item > table > tbody > tr > td:first-child {
@@ -158,7 +162,6 @@ const renderInvoice = (invoice) => (
 
     .hours-item, .rate-item, .amount-item {
     flex: 1 1 33.333%;
-
     }
 
     .total-container {
@@ -174,7 +177,6 @@ const renderInvoice = (invoice) => (
     flex: 1 1 40%;
     min-width: 230px;
     }
-
 
     .total-item > table {
     border: 1px solid #e7e7e7;
@@ -240,7 +242,7 @@ const renderInvoice = (invoice) => (
 
 
         <section className="flex-container invoice-header">
-          <div className="flex-item">
+          <div className="flex-item business-item">
             <div><img src="http://placehold.it/90x90"/></div>
             <p>
               Paul Savignano<br/>
@@ -252,7 +254,8 @@ const renderInvoice = (invoice) => (
               Paul.Savignano@gmail.com
             </p>
           </div>
-          <div className="flex-item">
+          <div className="flex-item"></div>
+          <div className="flex-item invoice-summary-item">
             <h2>Invoice</h2>
             <table>
               <tbody>
@@ -308,7 +311,7 @@ const renderInvoice = (invoice) => (
               </div>
               <div className="flex-item amount-item">
                 <div><strong>Amount</strong></div>
-                <div contentEditable="true" suppressContentEditableWarning={true} name="amount">$1050.00</div>
+                <div>$1050.00</div>
               </div>
             </div>
           </div>
@@ -316,7 +319,7 @@ const renderInvoice = (invoice) => (
 
 
         <section className="flex-container total-container">
-          <div className="flex-item">Empty Item</div>
+          <div className="flex-item"></div>
           <div className="flex-item total-item">
             <table>
               <tbody>
