@@ -8,7 +8,6 @@ const handleInsertInvoice = (event) => {
     event.preventDefault()
     insertInvoice.call({
     }, (error, result) => {
-      console.log(result)
       if (error) {
         Bert.alert(error.reason, 'danger')
       } else {

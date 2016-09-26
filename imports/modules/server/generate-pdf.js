@@ -7,7 +7,6 @@ let module
 const getBase64String = (path) => {
   try {
     const file = fs.readFileSync(path)
-    console.log(typeof(file))
     return new Buffer(file).toString('base64')
   } catch (exception) {
     module.reject(exception)

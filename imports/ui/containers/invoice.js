@@ -4,7 +4,6 @@ import { Invoice } from '../components/invoice'
 import { Meteor } from 'meteor/meteor'
 
 export default createContainer(({ params }) => {
-  console.log(params)
   const { invoiceId } = params
   const subscription = Meteor.subscribe('invoices')
   const loading = !subscription.ready()
