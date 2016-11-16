@@ -10,6 +10,7 @@ import fileSaver from 'file-saver'
 import { updateInvoice, removeInvoice } from '../../api/invoices/methods'
 import { base64ToBlob } from '../../modules/base64-to-blob'
 
+
 const handleDownloadPDF = (event) => {
   event.preventDefault()
   const { target } = event
@@ -74,424 +75,378 @@ const handleRemoveInvoice = (event) => {
   })
 }
 
-const renderInvoice = (invoice) => (
-  <InlineCss stylesheet={`
-
-    .flex-container {
-    display: flex;
-    display: -webkit-flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    -webkit-justify-content: space-between;
-    align-content: center;
-    align-items: top;
-    }
-
-    .flex-item {
-    -webkit-flex: 1;
-    flex: 1 1 auto;
-    align-self: auto;
-    min-height: auto;
-    }
-
-    .invoice-control {
-    align-items: center;
-    }
-
-    .button-group {
-    margin-top: 10px;
-    }
-
-    .button-group > button:nth-child(2) {
-    margin-left: 5px;
-    margin-right: 5px;
-    }
-
-    .business-item, .invoice-summary-item {
-    flex: 1 1 200px;
-    min-width: 200px;
-    }
-
-    .invoice-header > .flex-item:nth-child(2) {
-    flex: 3 3 30%;
-    }
-
-    .invoice-header > .flex-item > table {
-    width: 100%;
-    }
-
-    .amount-due-summary {
-    margin-top: 20px;
-    border: 1px solid black;
-    padding: 10px 15px;
-    border-radius: 8px;
-    text-align: center;
-    }
-
-    .description-hours-rate-amount-container {
-    border-bottom: 1px solid #e7e7e7;
-    }
-
-    .description-item > :nth-child(1), .hours-item > :nth-child(1), .rate-item > :nth-child(1), .amount-item > :nth-child(1) {
-    border: 1px solid #e7e7e7;
-    background-color: #f8f8f8;
-    border-radius: 3px;
-    padding: 10px 15px;
-    }
-
-    .description-item > :nth-child(2), .hours-item > :nth-child(2), .rate-item > :nth-child(2), .amount-item > :nth-child(2) {
-    padding: 10px 15px;
-    }
-
-    .description-item {
-    flex: 1 1 60%;
-    min-width: 230px;
-    }
-
-    .hours-rate-amount-container {
-    flex-flow: row nowrap
-    }
-
-    .hours-rate-amount-item {
-    flex: 1 1 40%;
-    min-width: 230px;
-    }
-
-    .hours-item, .rate-item, .amount-item {
-    flex: 1 1 33.333%;
-    }
-
-    .total-container {
-    flex-wrap: wrap-reverse;
-    }
-
-    .total-container > :nth-child(1) {
-    flex: 1 1 60%;
-    min-width: 230px;
-    }
-
-    .total-container > :nth-child(2) {
-    flex: 1 1 40%;
-    min-width: 230px;
-    }
-
-    .total-item > table {
-    border-collapse: collapse;
-    border: 1px solid #e7e7e7;
-    width: 100%;
-    margin-top: -1px;
-    }
-
-    .total-item > table td {
-    border: 1px solid #e7e7e7;
-    padding: 10px 15px;
-    }
-
-    .total-item > table td:nth-child(2) {
-    width: 33.333%;
-    }
-
-    [contenteditable]:hover {
-    outline: 0px solid transparent;
-    background-color: #5bc0de;
-    }
-
-    [contenteditable]:focus:not(:hover) {
-    outline: 0px solid transparent;
-    background-color: #5cb85c;
-    }
-
-    [contenteditable]:focus {
-    outling: 0px;
-    background-color: #5cb85c;
-    }
-
-    [contenteditable] {
-    padding: 3px;
-    border-radius: 3px;
-    }
-
-
-
-
-
-
-
-    @media print {
-    /* A4 page is 595px width by 852px height */
-    header, .hidden { display: none}
-    form { zoom: 80% } /* 714px */
-
-    .flex-container {
-    display: flex;
-    display: -webkit-flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    -webkit-justify-content: space-between;
-    align-content: center;
-    align-items: top;
-    }
-
-    .flex-item {
-    -webkit-flex: 1;
-    flex: 1 1 auto;
-    align-self: auto;
-    min-height: auto;
-    }
-
-    .invoice-control {
-    align-items: center;
-    }
+const renderInvoice = (invoice) => {
+  const style = {
+    pageHeaderContainer: {
+      display: 'flex',
+      flexFlow: 'row wrap',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    pageButtonsContainer: {
+      display: 'flex',
+      flexFlow: 'row nowrap',
+    },
+    pageButton2: {
+      marginLeft: 5,
+      marginRight: 5,
+    },
+    headerContainer: {
+      display: 'flex',
+      flexFlow: 'row wrap',
+      justifyContent: 'space-between',
+    },
+    headerItem: {
+      flex: '1 1 200px',
+      minWidth: 200,
+      maxWidth: 300,
+    },
+    headerItemSeparator: {
+      flex: '3 3 30px',
+      minWidth: 30,
+    },
+    amountDueSum: {
+      marginTop: 20,
+      border: '1px solid black',
+      padding: '10px 15px',
+      borderRadius: 8,
+      textAlign: 'center',
+    },
+    detailsContainer: {
+      display: 'flex',
+      flexFlow: 'row wrap',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      borderBottom: '1px solid #e7e7e7',
+    },
+    detailsDescriptionItem: {
+      flex: '1 1 60%',
+      minWidth: 230,
+    },
+    detailsHoursRateAmountContainer: {
+      flexFlow: 'row nowrap',
+    },
+    detailsHoursRateAmountItem: {
+      flex: '1 1 40%',
+      minWidth: 230,
+    },
+    hoursRateAmountContainer: {
+      display: 'flex',
+      flexFlow: 'row nowrap',
+    },
+    hoursRateAmountItem: {
+      flex: '1 1 33.333%',
+    },
+    detailsHeader: {
+      border: '1px solid #e7e7e7',
+      backgroundColor: '#f8f8f8',
+      borderRadius: 3,
+      padding: '10px 15px',
+    },
+    detailsContent: {
+      padding: '10px 15px',
+    },
+    totalContainer: {
+      display: 'flex',
+      flexFlow: 'row wrap-reverse',
+    },
+    totalItemSeparator: {
+      flex: '1 1 60%',
+      minWidth: 230,
+    },
+    totalItem: {
+      flex: '1 1 40%',
+      minWidth: 230,
+    },
+    totalTable: {
+      borderCollapse: 'collapse',
+      border: '1px solid #e7e7e7',
+      width: '100%',
+      marginTop: -1,
+    },
+    totalTd: {
+      border: '1px solid #e7e7e7',
+      padding: '10px 15px',
+    },
+    totalTd2: {
+      width: '33.333%',
+    },
+  }
+  console.log(style)
+  return (
+    <InlineCss stylesheet={`
+
 
-    .button-group {
-    margin-top: 10px;
-    }
-
-    .button-group > button:nth-child(2) {
-    margin-left: 5px;
-    margin-right: 5px;
-    }
-
-    .business-item, .invoice-summary-item {
-    flex: 1 1 200px;
-    min-width: 200px;
-    }
-
-    .invoice-header > .flex-item:nth-child(2) {
-    flex: 3 3 30%;
-    }
-
-    .invoice-header > .flex-item > table {
-    width: 100%;
-    }
-
-    .amount-due-summary {
-    margin-top: 20px;
-    border: 1px solid black;
-    padding: 10px 15px;
-    border-radius: 8px;
-    text-align: center;
-    }
-
-    .description-hours-rate-amount-container {
-    border-bottom: 1px solid #e7e7e7;
-    }
-
-    .description-item > :nth-child(1), .hours-item > :nth-child(1), .rate-item > :nth-child(1), .amount-item > :nth-child(1) {
-    border: 1px solid #e7e7e7;
-    background-color: #f8f8f8;
-    border-radius: 3px;
-    padding: 10px 15px;
-    }
-
-    .description-item > :nth-child(2), .hours-item > :nth-child(2), .rate-item > :nth-child(2), .amount-item > :nth-child(2) {
-    padding: 10px 15px;
-    }
-
-    .description-item {
-    flex: 1 1 60%;
-    min-width: 230px;
-    }
-
-    .hours-rate-amount-container {
-    flex-flow: row nowrap
-    }
-
-    .hours-rate-amount-item {
-    flex: 1 1 40%;
-    min-width: 230px;
-    }
-
-    .hours-item, .rate-item, .amount-item {
-    flex: 1 1 33.333%;
-    }
-
-    .total-container {
-    flex-wrap: wrap-reverse;
-    }
-
-    .total-container > :nth-child(1) {
-    flex: 1 1 60%;
-    min-width: 230px;
-    }
-
-    .total-container > :nth-child(2) {
-    flex: 1 1 40%;
-    min-width: 230px;
-    }
-
-    .total-item > table {
-    border: 1px solid #e7e7e7;
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: -1px;
-    }
-
-    .total-item > table td {
-    border: 1px solid #e7e7e7;
-    padding: 10px 15px;
-    }
-
-    .total-item > table td:nth-child(2) {
-    width: 33.333%;
-    }
-    }
-
-
-
-
-
-
-  `}>
-    <header>
-      <section className="flex-container invoice-control">
-        <h1>Invoice Details</h1>
-        <div className="button-group">
-          <Button onClick={ handleDownloadPDF } data-id={ invoice._id } bsStyle="primary">Download</Button>
-          <Button onClick={ handleUpdateInvoice } data-id={ invoice._id } bsStyle="success">Update</Button>
-          <Button onClick={ handleRemoveInvoice } data-id={ invoice._id } bsStyle="danger">Remove</Button>
-        </div>
-      </section>
-      <hr/>
-      <br/><br/>
-    </header>
-
-    <ListGroupItem>
-
-      <form onSubmit={ handleUpdateInvoice } data-id={ invoice._id } name="invoice-form">
-
-
-        <section className="flex-container invoice-header">
-          <div className="flex-item business-item">
-            <br/>
-            <p>
-              Paul Savignano<br/>
-              1234 Carlsbad Ct<br/>
-              Carlsbad, CA 92011
-            </p>
-            <p>
-              Phone: (760) 123-1234<br/>
-              Paul.Savignano@gmail.com
-            </p>
-          </div>
-          <div className="flex-item"></div>
-          <div className="flex-item invoice-summary-item">
-            <h2>Invoice</h2>
-            <table>
-              <tbody>
-                <tr>
-                  <td>Invoice #:</td>
-                  <td contentEditable="true" suppressContentEditableWarning={true} name="number">
-                    { invoice.number }
-                  </td>
-                </tr>
-                <tr>
-                  <td>Invoice date:</td>
-                  <td contentEditable="true" suppressContentEditableWarning={true} name="date">
-                    { invoice.date }
-                  </td>
-                </tr>
-                <tr>
-                  <td>Terms:</td>
-                  <td contentEditable="true" suppressContentEditableWarning={true} name="terms">
-                    { invoice.terms }
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="amount-due-summary">
-              <div>Amount Due:</div>
-              <div><strong>$1050.00</strong></div>
-            </div>
+
+
+
+
+
+      @media print {
+      /* A4 page is 595px width by 852px height */
+      header, .hidden { display: none}
+      form { zoom: 80% } /* 714px */
+
+      .flex-item {
+      -webkit-flex: 1;
+      flex: 1 1 auto;
+      align-self: auto;
+      min-height: auto;
+      }
+
+      .invoice-control {
+      align-items: center;
+      }
+
+      .button-group {
+      margin-top: 10px;
+      }
+
+      .button-group > button:nth-child(2) {
+      margin-left: 5px;
+      margin-right: 5px;
+      }
+
+      .business-item, .invoice-summary-item {
+      flex: 1 1 200px;
+      min-width: 200px;
+      }
+
+      .invoice-header > .flex-item:nth-child(2) {
+      flex: 3 3 30%;
+      }
+
+      .invoice-header > .flex-item > table {
+      width: 100%;
+      }
+
+      .amount-due-summary {
+      margin-top: 20px;
+      border: 1px solid black;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-align: center;
+      }
+
+      .description-hours-rate-amount-container {
+      border-bottom: 1px solid #e7e7e7;
+      }
+
+      .description-item > :nth-child(1), .hours-item > :nth-child(1), .rate-item > :nth-child(1), .amount-item > :nth-child(1) {
+      border: 1px solid #e7e7e7;
+      background-color: #f8f8f8;
+      border-radius: 3px;
+      padding: 10px 15px;
+      }
+
+      .description-item > :nth-child(2), .hours-item > :nth-child(2), .rate-item > :nth-child(2), .amount-item > :nth-child(2) {
+      padding: 10px 15px;
+      }
+
+      .description-item {
+      flex: 1 1 60%;
+      min-width: 230px;
+      }
+
+      .hours-rate-amount-container {
+      flex-flow: row nowrap
+      }
+
+      .hours-rate-amount-item {
+      flex: 1 1 40%;
+      min-width: 230px;
+      }
+
+      .hours-item, .rate-item, .amount-item {
+      flex: 1 1 33.333%;
+      }
+
+      .total-container {
+      flex-wrap: wrap-reverse;
+      }
+
+      .total-container > :nth-child(1) {
+      flex: 1 1 60%;
+      min-width: 230px;
+      }
+
+      .total-container > :nth-child(2) {
+      flex: 1 1 40%;
+      min-width: 230px;
+      }
+
+      .total-item > table {
+      border: 1px solid #e7e7e7;
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: -1px;
+      }
+
+      .total-item > table td {
+      border: 1px solid #e7e7e7;
+      padding: 10px 15px;
+      }
+
+      .total-item > table td:nth-child(2) {
+      width: 33.333%;
+      }
+      }
+
+
+
+
+
+
+    `}>
+      <header>
+        <section style={ style.pageHeaderContainer }>
+          <h1>Invoice Details</h1>
+          <div style={ style.pageButtonsContainer }>
+            <Button onClick={ handleDownloadPDF } data-id={ invoice._id } bsStyle="primary">Download</Button>
+            <Button onClick={ handleUpdateInvoice } data-id={ invoice._id } bsStyle="success" style={ style.pageButton2 }>Update</Button>
+            <Button onClick={ handleRemoveInvoice } data-id={ invoice._id } bsStyle="danger">Remove</Button>
           </div>
         </section>
-        <br/>
         <hr/>
+        <br/><br/>
+      </header>
 
-        <section className="bill-to">
-          <h3>Bill To:</h3>
-          <div contentEditable="true" suppressContentEditableWarning={true} name="bill_to">
-            { invoice.bill_to }
-          </div>
-          <h3>CC:</h3>
-          <div contentEditable="true" suppressContentEditableWarning={true} name="bill_to_cc">
-            { invoice.bill_to_cc }
-          </div>
-        </section>
-        <br/>
-        <br/>
+      <ListGroupItem>
 
+        <form onSubmit={ handleUpdateInvoice } data-id={ invoice._id } name="invoice-form">
 
-        <section className="flex-container description-hours-rate-amount-container">
-          <div className="flex-item description-item">
-            <div><strong>Description</strong></div>
-            <div contentEditable="true" suppressContentEditableWarning={true} name="description">
-              { invoice.description }
+          <section style={ style.headerContainer }>
+            <div style={ style.headerItem  }>
+              <br/>
+              <p>
+                Paul Savignano<br/>
+                1234 Carlsbad Ct<br/>
+                Carlsbad, CA 92011
+              </p>
+              <p>
+                Phone: (760) 123-1234<br/>
+                Paul.Savignano@gmail.com
+              </p>
             </div>
-          </div>
-          <div className="flex-item hours-rate-amount-item">
-            <div className="flex-container hours-rate-amount-container">
-              <div className="flex-item hours-item">
-                <div><strong>Hours</strong></div>
-                <div contentEditable="true" suppressContentEditableWarning={true} name="hours">
-                  { invoice.hours }
+            <div style={ style.headerItemSeparator }></div>
+            <div style={ style.headerItem }>
+              <h2>Invoice</h2>
+              <table>
+                <tbody>
+                  <tr>
+                    <td>Invoice #:</td>
+                    <td contentEditable="true" suppressContentEditableWarning={true} name="number">
+                      { invoice.number }
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Invoice date:</td>
+                    <td contentEditable="true" suppressContentEditableWarning={true} name="date">
+                      { invoice.date }
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Terms:</td>
+                    <td contentEditable="true" suppressContentEditableWarning={true} name="terms">
+                      { invoice.terms }
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style={ style.amountDueSum }>
+                <div>Amount Due:</div>
+                <div><strong>$1050.00</strong></div>
+              </div>
+            </div>
+          </section>
+          <br/>
+          <hr/>
+
+          <section>
+            <h3>Bill To:</h3>
+            <div contentEditable="true" suppressContentEditableWarning={true} name="bill_to">
+              { invoice.bill_to }
+            </div>
+            <h3>CC:</h3>
+            <div contentEditable="true" suppressContentEditableWarning={true} name="bill_to_cc">
+              { invoice.bill_to_cc }
+            </div>
+          </section>
+          <br/>
+          <br/>
+
+
+          <section style={ style.detailsContainer }>
+            <div style={ style.detailsDescriptionItem }>
+              <div style={ style.detailsHeader }><strong>Description</strong></div>
+              <div style={ style.detailsContent } contentEditable="true" suppressContentEditableWarning={true} name="description">
+                { invoice.description }
+              </div>
+            </div>
+            <div style={ style.detailsHoursRateAmountItem }>
+              <div style={ style.hoursRateAmountContainer }>
+                <div style={ style.hoursRateAmountItem }>
+                  <div style={ style.detailsHeader }><strong>Hours</strong></div>
+                  <div style={ style.detailsContent } contentEditable="true" suppressContentEditableWarning={true} name="hours">
+                    { invoice.hours }
+                  </div>
+                </div>
+                <div style={ style.hoursRateAmountItem }>
+                  <div style={ style.detailsHeader }><strong>Rate</strong></div>
+                  <div style={ style.detailsContent } contentEditable="true" suppressContentEditableWarning={true} name="rate">
+                    { invoice.rate }
+                  </div>
+                </div>
+                <div style={ style.hoursRateAmountItem }>
+                  <div style={ style.detailsHeader }><strong>Amount</strong></div>
+                  <div style={ style.detailsContent }>$1050.00</div>
                 </div>
               </div>
-              <div className="flex-item rate-item">
-                <div><strong>Rate</strong></div>
-                <div contentEditable="true" suppressContentEditableWarning={true} name="rate">
-                  { invoice.rate }
-                </div>
-              </div>
-              <div className="flex-item amount-item">
-                <div><strong>Amount</strong></div>
-                <div>$1050.00</div>
-              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
 
-        <section className="flex-container total-container">
-          <div className="flex-item"></div>
-          <div className="flex-item total-item">
-            <table>
-              <tbody>
-                <tr>
-                  <td>Subtotal:</td>
-                  <td>$1050.00</td>
-                </tr>
-                <tr>
-                  <td>Total:</td>
-                  <td>$1050.00</td>
-                </tr>
-                <tr>
-                  <td>Amount paid:</td>
-                  <td>$1050.00</td>
-                </tr>
-                <tr>
-                  <td>Amount due:</td>
-                  <td>$0.00</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+          <section style={ style.totalContainer }>
+            <div style={ style.totalItemSeparator }></div>
+            <div style={ style.totalItem }>
+              <table style={ style.totalTable }>
+                <tbody>
+                  <tr>
+                    <td style={ style.totalTd }>Subtotal:</td>
+                    <td style={ Object.assign(style.totalTd, style.totalTd2) }>$1050.00</td>
+                  </tr>
+                  <tr>
+                    <td style={ style.totalTd }>Total:</td>
+                    <td style={ Object.assign(style.totalTd, style.totalTd2) }>$1050.00</td>
+                  </tr>
+                  <tr>
+                    <td style={ style.totalTd }>Amount paid:</td>
+                    <td style={ Object.assign(style.totalTd, style.totalTd2) }>$1050.00</td>
+                  </tr>
+                  <tr>
+                    <td style={ style.totalTd }>Amount due:</td>
+                    <td style={ Object.assign(style.totalTd, style.totalTd2) }>$0.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-        <br/>
-        <hr/>
+          <br/>
+          <hr/>
 
-        <section className="invoice-notes">
-          <h3>Notes:</h3>
-          <div contentEditable="true" suppressContentEditableWarning={true} name="notes">
-            { invoice.notes }<br/>
-          </div>
-        </section>
-        <br/>
-      </form>
-    </ListGroupItem>
-  </InlineCss>
-)
+          <section className="invoice-notes">
+            <h3>Notes:</h3>
+            <div contentEditable="true" suppressContentEditableWarning={true} name="notes">
+              { invoice.notes }<br/>
+            </div>
+          </section>
+          <br/>
+        </form>
+      </ListGroupItem>
+    </InlineCss>
+  )
+}
 
 
 export const Invoice = ({ loading, invoice }) => {
