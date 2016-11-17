@@ -129,7 +129,6 @@ const renderInvoice = (invoice) => {
       flexFlow: 'row wrap',
       justifyContent: 'space-between',
       WebkitJustifyContent: 'space-between',
-      alignItems: 'center',
       borderBottom: '1px solid #e7e7e7',
     },
     detailsDescriptionItem: {
@@ -138,6 +137,8 @@ const renderInvoice = (invoice) => {
       minWidth: 230,
     },
     detailsHoursRateAmountContainer: {
+      display: 'flex',
+      display: '-webkit-flex',
       flexFlow: 'row nowrap',
     },
     detailsHoursRateAmountItem: {
@@ -147,9 +148,9 @@ const renderInvoice = (invoice) => {
     },
     hoursRateAmountContainer: {
       display: 'flex',
+      display: '-webkit-flex',
       flexFlow: 'row nowrap',
       alignContent: 'center',
-      alignItems: 'top',
     },
     hoursRateAmountItem: {
       flex: '1 1 33.333%',
