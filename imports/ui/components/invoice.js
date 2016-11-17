@@ -77,14 +77,21 @@ const handleRemoveInvoice = (event) => {
 
 const renderInvoice = (invoice) => {
   const style = {
+    form: {
+      padding: '10px 15px',
+      border: '1px solid #ddd',
+    },
     pageHeaderContainer: {
       display: 'flex',
+      display: '-webkit-flex',
       flexFlow: 'row wrap',
       justifyContent: 'space-between',
+      WebkitJustifyContent: 'space-between',
       alignItems: 'center',
     },
     pageButtonsContainer: {
       display: 'flex',
+      display: '-webkit-flex',
       flexFlow: 'row nowrap',
     },
     pageButton2: {
@@ -93,16 +100,20 @@ const renderInvoice = (invoice) => {
     },
     headerContainer: {
       display: 'flex',
+      display: '-webkit-flex',
       flexFlow: 'row wrap',
       justifyContent: 'space-between',
+      WebkitJustifyContent: 'space-between',
     },
     headerItem: {
       flex: '1 1 200px',
+      WebkitFlex: '1 1 200px',
       minWidth: 200,
       maxWidth: 300,
     },
     headerItemSeparator: {
       flex: '3 3 30px',
+      WebkitFlex: '3 3 30px',
       minWidth: 30,
     },
     amountDueSum: {
@@ -114,13 +125,16 @@ const renderInvoice = (invoice) => {
     },
     detailsContainer: {
       display: 'flex',
+      display: '-webkit-flex',
       flexFlow: 'row wrap',
       justifyContent: 'space-between',
+      WebkitJustifyContent: 'space-between',
       alignItems: 'center',
       borderBottom: '1px solid #e7e7e7',
     },
     detailsDescriptionItem: {
       flex: '1 1 60%',
+      WebkitFlex: '1 1 60%',
       minWidth: 230,
     },
     detailsHoursRateAmountContainer: {
@@ -128,14 +142,18 @@ const renderInvoice = (invoice) => {
     },
     detailsHoursRateAmountItem: {
       flex: '1 1 40%',
+      WebkitFlex: '1 1 40%',
       minWidth: 230,
     },
     hoursRateAmountContainer: {
       display: 'flex',
       flexFlow: 'row nowrap',
+      alignContent: 'center',
+      alignItems: 'top',
     },
     hoursRateAmountItem: {
       flex: '1 1 33.333%',
+      WebkitFlex: '1 1 33.333%',
     },
     detailsHeader: {
       border: '1px solid #e7e7e7',
@@ -148,14 +166,17 @@ const renderInvoice = (invoice) => {
     },
     totalContainer: {
       display: 'flex',
+      display: '-webkit-flex',
       flexFlow: 'row wrap-reverse',
     },
     totalItemSeparator: {
       flex: '1 1 60%',
+      WebkitFlex: '1 1 60%',
       minWidth: 230,
     },
     totalItem: {
       flex: '1 1 40%',
+      WebkitFlex: '1 1 40%',
       minWidth: 230,
     },
     totalTable: {
@@ -167,136 +188,35 @@ const renderInvoice = (invoice) => {
     totalTd: {
       border: '1px solid #e7e7e7',
       padding: '10px 15px',
+      width: '66.666%',
     },
     totalTd2: {
       width: '33.333%',
     },
   }
-  console.log(style)
   return (
     <InlineCss stylesheet={`
-
-
-
-
-
-
-
+      [contenteditable]:hover {
+        outline: 0px solid transparent;
+        background-color: #5bc0de;
+      }
+      [contenteditable]:focus:not(:hover) {
+        outline: 0px solid transparent;
+        background-color: #5cb85c;
+      }
+      [contenteditable]:focus {
+        outling: 0px;
+        background-color: #5cb85c;
+      }
+      [contenteditable] {
+        padding: 2px;
+        border-radius: 3px;
+      }
       @media print {
-      /* A4 page is 595px width by 852px height */
-      header, .hidden { display: none}
-      form { zoom: 80% } /* 714px */
-
-      .flex-item {
-      -webkit-flex: 1;
-      flex: 1 1 auto;
-      align-self: auto;
-      min-height: auto;
+        /* A4 page is 595px width by 852px height */
+        header, .hidden { display: none}
+        form { zoom: 80% } /* 714px */
       }
-
-      .invoice-control {
-      align-items: center;
-      }
-
-      .button-group {
-      margin-top: 10px;
-      }
-
-      .button-group > button:nth-child(2) {
-      margin-left: 5px;
-      margin-right: 5px;
-      }
-
-      .business-item, .invoice-summary-item {
-      flex: 1 1 200px;
-      min-width: 200px;
-      }
-
-      .invoice-header > .flex-item:nth-child(2) {
-      flex: 3 3 30%;
-      }
-
-      .invoice-header > .flex-item > table {
-      width: 100%;
-      }
-
-      .amount-due-summary {
-      margin-top: 20px;
-      border: 1px solid black;
-      padding: 10px 15px;
-      border-radius: 8px;
-      text-align: center;
-      }
-
-      .description-hours-rate-amount-container {
-      border-bottom: 1px solid #e7e7e7;
-      }
-
-      .description-item > :nth-child(1), .hours-item > :nth-child(1), .rate-item > :nth-child(1), .amount-item > :nth-child(1) {
-      border: 1px solid #e7e7e7;
-      background-color: #f8f8f8;
-      border-radius: 3px;
-      padding: 10px 15px;
-      }
-
-      .description-item > :nth-child(2), .hours-item > :nth-child(2), .rate-item > :nth-child(2), .amount-item > :nth-child(2) {
-      padding: 10px 15px;
-      }
-
-      .description-item {
-      flex: 1 1 60%;
-      min-width: 230px;
-      }
-
-      .hours-rate-amount-container {
-      flex-flow: row nowrap
-      }
-
-      .hours-rate-amount-item {
-      flex: 1 1 40%;
-      min-width: 230px;
-      }
-
-      .hours-item, .rate-item, .amount-item {
-      flex: 1 1 33.333%;
-      }
-
-      .total-container {
-      flex-wrap: wrap-reverse;
-      }
-
-      .total-container > :nth-child(1) {
-      flex: 1 1 60%;
-      min-width: 230px;
-      }
-
-      .total-container > :nth-child(2) {
-      flex: 1 1 40%;
-      min-width: 230px;
-      }
-
-      .total-item > table {
-      border: 1px solid #e7e7e7;
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: -1px;
-      }
-
-      .total-item > table td {
-      border: 1px solid #e7e7e7;
-      padding: 10px 15px;
-      }
-
-      .total-item > table td:nth-child(2) {
-      width: 33.333%;
-      }
-      }
-
-
-
-
-
-
     `}>
       <header>
         <section style={ style.pageHeaderContainer }>
@@ -311,139 +231,137 @@ const renderInvoice = (invoice) => {
         <br/><br/>
       </header>
 
-      <ListGroupItem>
 
-        <form onSubmit={ handleUpdateInvoice } data-id={ invoice._id } name="invoice-form">
+      <form onSubmit={ handleUpdateInvoice } data-id={ invoice._id } name="invoice-form" style={ style.form }>
 
-          <section style={ style.headerContainer }>
-            <div style={ style.headerItem  }>
-              <br/>
-              <p>
-                Paul Savignano<br/>
-                1234 Carlsbad Ct<br/>
-                Carlsbad, CA 92011
-              </p>
-              <p>
-                Phone: (760) 123-1234<br/>
-                Paul.Savignano@gmail.com
-              </p>
+        <section style={ style.headerContainer }>
+          <div style={ style.headerItem  }>
+            <br/>
+            <p>
+              Paul Savignano<br/>
+              1234 Carlsbad Ct<br/>
+              Carlsbad, CA 92011
+            </p>
+            <p>
+              Phone: (760) 123-1234<br/>
+              Paul.Savignano@gmail.com
+            </p>
+          </div>
+          <div style={ style.headerItemSeparator }></div>
+          <div style={ style.headerItem }>
+            <h2>Invoice</h2>
+            <table>
+              <tbody>
+                <tr>
+                  <td>Invoice #:</td>
+                  <td contentEditable="true" suppressContentEditableWarning={true} name="number">
+                    { invoice.number }
+                  </td>
+                </tr>
+                <tr>
+                  <td>Invoice date:</td>
+                  <td contentEditable="true" suppressContentEditableWarning={true} name="date">
+                    { invoice.date }
+                  </td>
+                </tr>
+                <tr>
+                  <td>Terms:</td>
+                  <td contentEditable="true" suppressContentEditableWarning={true} name="terms">
+                    { invoice.terms }
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div style={ style.amountDueSum }>
+              <div>Amount Due:</div>
+              <div><strong>$1050.00</strong></div>
             </div>
-            <div style={ style.headerItemSeparator }></div>
-            <div style={ style.headerItem }>
-              <h2>Invoice</h2>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>Invoice #:</td>
-                    <td contentEditable="true" suppressContentEditableWarning={true} name="number">
-                      { invoice.number }
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Invoice date:</td>
-                    <td contentEditable="true" suppressContentEditableWarning={true} name="date">
-                      { invoice.date }
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Terms:</td>
-                    <td contentEditable="true" suppressContentEditableWarning={true} name="terms">
-                      { invoice.terms }
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div style={ style.amountDueSum }>
-                <div>Amount Due:</div>
-                <div><strong>$1050.00</strong></div>
-              </div>
-            </div>
-          </section>
-          <br/>
-          <hr/>
+          </div>
+        </section>
+        <br/>
+        <hr/>
 
-          <section>
-            <h3>Bill To:</h3>
-            <div contentEditable="true" suppressContentEditableWarning={true} name="bill_to">
-              { invoice.bill_to }
-            </div>
-            <h3>CC:</h3>
-            <div contentEditable="true" suppressContentEditableWarning={true} name="bill_to_cc">
-              { invoice.bill_to_cc }
-            </div>
-          </section>
-          <br/>
-          <br/>
+        <section>
+          <h3>Bill To:</h3>
+          <div contentEditable="true" suppressContentEditableWarning={true} name="bill_to">
+            { invoice.bill_to }
+          </div>
+          <h3>CC:</h3>
+          <div contentEditable="true" suppressContentEditableWarning={true} name="bill_to_cc">
+            { invoice.bill_to_cc }
+          </div>
+        </section>
+        <br/>
+        <br/>
 
 
-          <section style={ style.detailsContainer }>
-            <div style={ style.detailsDescriptionItem }>
-              <div style={ style.detailsHeader }><strong>Description</strong></div>
-              <div style={ style.detailsContent } contentEditable="true" suppressContentEditableWarning={true} name="description">
-                { invoice.description }
-              </div>
+        <section style={ style.detailsContainer }>
+          <div style={ style.detailsDescriptionItem }>
+            <div style={ style.detailsHeader }><strong>Description</strong></div>
+            <div style={ style.detailsContent } contentEditable="true" suppressContentEditableWarning={true} name="description">
+              { invoice.description }
             </div>
-            <div style={ style.detailsHoursRateAmountItem }>
-              <div style={ style.hoursRateAmountContainer }>
-                <div style={ style.hoursRateAmountItem }>
-                  <div style={ style.detailsHeader }><strong>Hours</strong></div>
-                  <div style={ style.detailsContent } contentEditable="true" suppressContentEditableWarning={true} name="hours">
-                    { invoice.hours }
-                  </div>
-                </div>
-                <div style={ style.hoursRateAmountItem }>
-                  <div style={ style.detailsHeader }><strong>Rate</strong></div>
-                  <div style={ style.detailsContent } contentEditable="true" suppressContentEditableWarning={true} name="rate">
-                    { invoice.rate }
-                  </div>
-                </div>
-                <div style={ style.hoursRateAmountItem }>
-                  <div style={ style.detailsHeader }><strong>Amount</strong></div>
-                  <div style={ style.detailsContent }>$1050.00</div>
+          </div>
+          <div style={ style.detailsHoursRateAmountItem }>
+            <div style={ style.hoursRateAmountContainer }>
+              <div style={ style.hoursRateAmountItem }>
+                <div style={ style.detailsHeader }><strong>Hours</strong></div>
+                <div style={ style.detailsContent } contentEditable="true" suppressContentEditableWarning={true} name="hours">
+                  { invoice.hours }
                 </div>
               </div>
+              <div style={ style.hoursRateAmountItem }>
+                <div style={ style.detailsHeader }><strong>Rate</strong></div>
+                <div style={ style.detailsContent } contentEditable="true" suppressContentEditableWarning={true} name="rate">
+                  { invoice.rate }
+                </div>
+              </div>
+              <div style={ style.hoursRateAmountItem }>
+                <div style={ style.detailsHeader }><strong>Amount</strong></div>
+                <div style={ style.detailsContent }>$1050.00</div>
+              </div>
             </div>
-          </section>
+          </div>
+        </section>
 
 
-          <section style={ style.totalContainer }>
-            <div style={ style.totalItemSeparator }></div>
-            <div style={ style.totalItem }>
-              <table style={ style.totalTable }>
-                <tbody>
-                  <tr>
-                    <td style={ style.totalTd }>Subtotal:</td>
-                    <td style={ Object.assign(style.totalTd, style.totalTd2) }>$1050.00</td>
-                  </tr>
-                  <tr>
-                    <td style={ style.totalTd }>Total:</td>
-                    <td style={ Object.assign(style.totalTd, style.totalTd2) }>$1050.00</td>
-                  </tr>
-                  <tr>
-                    <td style={ style.totalTd }>Amount paid:</td>
-                    <td style={ Object.assign(style.totalTd, style.totalTd2) }>$1050.00</td>
-                  </tr>
-                  <tr>
-                    <td style={ style.totalTd }>Amount due:</td>
-                    <td style={ Object.assign(style.totalTd, style.totalTd2) }>$0.00</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
+        <section style={ style.totalContainer }>
+          <div style={ style.totalItemSeparator }></div>
+          <div style={ style.totalItem }>
+            <table style={ style.totalTable }>
+              <tbody>
+                <tr>
+                  <td style={ style.totalTd }>Subtotal:</td>
+                  <td style={ Object.assign({}, style.totalTd, style.totalTd2) }>$1050.00</td>
+                </tr>
+                <tr>
+                  <td style={ style.totalTd }>Total:</td>
+                  <td style={ Object.assign({}, style.totalTd, style.totalTd2) }>$1050.00</td>
+                </tr>
+                <tr>
+                  <td style={ style.totalTd }>Amount paid:</td>
+                  <td style={ Object.assign({}, style.totalTd, style.totalTd2) }>$1050.00</td>
+                </tr>
+                <tr>
+                  <td style={ style.totalTd }>Amount due:</td>
+                  <td style={ Object.assign({}, style.totalTd, style.totalTd2) }>$0.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-          <br/>
-          <hr/>
+        <br/>
+        <hr/>
 
-          <section className="invoice-notes">
-            <h3>Notes:</h3>
-            <div contentEditable="true" suppressContentEditableWarning={true} name="notes">
-              { invoice.notes }<br/>
-            </div>
-          </section>
-          <br/>
-        </form>
-      </ListGroupItem>
+        <section className="invoice-notes">
+          <h3>Notes:</h3>
+          <div contentEditable="true" suppressContentEditableWarning={true} name="notes">
+            { invoice.notes }<br/>
+          </div>
+        </section>
+        <br/>
+      </form>
     </InlineCss>
   )
 }

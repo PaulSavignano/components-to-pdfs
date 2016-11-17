@@ -14,3 +14,20 @@
   padding: 2px;
   border-radius: 3px;
 }
+
+.invoice-container {
+  @media print {
+    /* A4 page is 595px width by 852px height */
+    header, .hidden { display: none}
+    form { zoom: 80% } /* 714px */
+  }
+}
+
+form[name="invoice-form"] {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
